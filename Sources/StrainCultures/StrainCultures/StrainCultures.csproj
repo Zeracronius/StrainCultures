@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <OutputPath>..\..\1.5\Assemblies\</OutputPath>
+    <Optimize>True</Optimize>
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4297" />
     <PackageReference Include="Lib.Harmony" Version="2.3.5" />
