@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StrainCultures.Outcomes
 {
-	internal class AnimalOutcome : IOutcome
+	internal class RaceOutcome : IOutcome
 	{
 	}
 }

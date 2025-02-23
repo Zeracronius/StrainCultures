@@ -10,6 +10,20 @@ namespace StrainCultures.Things
 {
 	public class StrainCulture : Thing
 	{
+		public StrainCulture()
+		{
+			
+		}
+
+		/// <summary>
+		/// Create a new variant of a given strain.
+		/// </summary>
+		/// <param name="strain"></param>
+		public StrainCulture(StrainCulture strain)
+		{
+			
+		}
+
 		/// <summary>
 		/// Stability ratio. positive is stable, negative is unstable.
 		/// </summary>
