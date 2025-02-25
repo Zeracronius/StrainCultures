@@ -1,0 +1,11 @@
+<Defs>
+	<HediffDef>
+		<defName>SC_Mutated</defName>
+		<hediffClass>StrainCultures.Hediffs.Mutated</hediffClass>
+		<label>Mutated</label>
+		<description>This person has been mutated.</description>
+		<isBad>false</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<initialSeverity>1</initialSeverity>
+	</HediffDef>
+</Defs>

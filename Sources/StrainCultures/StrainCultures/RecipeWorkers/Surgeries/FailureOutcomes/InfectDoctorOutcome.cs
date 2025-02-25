@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace StrainCultures.RecipeWorkers.Surgeries
+namespace StrainCultures.RecipeWorkers.Surgeries.FailureOutcomes
 {
-	internal class InjectStrainCultureOutcome : SurgeryOutcome
+	internal class InfectDoctorOutcome : SurgeryOutcome
 	{
 		public override bool Apply(float quality, RecipeDef recipe, Pawn surgeon, Pawn patient, BodyPartRecord part)
 		{

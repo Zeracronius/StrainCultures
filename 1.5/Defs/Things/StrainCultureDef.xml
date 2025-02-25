@@ -1,0 +1,59 @@
+<Defs>
+	<ThingDef Name="Strain_StrainCulture" ParentName="ResourceBase">
+		<defName>Strain_StrainCulture</defName>
+		<label>Strain culture</label>
+		<description>Viral material that can be used to replicate the virus.</description>
+		<graphicData>
+			<texPath>Item/Serum/BS_Giantizer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<stackLimit>500</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<Mass>0.01</Mass>
+			<DeteriorationRate>10.0</DeteriorationRate>
+			<Flammability>0.2</Flammability>
+			<WorkToMake>100</WorkToMake>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<tradeability>None</tradeability>
+		<comps>
+			<li Class="CompProperties_Usable">
+				<useJob>UseItem</useJob>
+				<useLabel>Use {0_label}</useLabel>
+				<useDuration>0</useDuration>
+				<warmupMote>Mote_ResurrectAbility</warmupMote>
+			</li>
+			<li Class="CompProperties_Targetable">
+				<compClass>CompTargetable_SinglePawn</compClass>
+			</li>
+
+			<li Class="BigAndSmall.CompProperties_TargetEffectApplySerum">
+				<hediffName>BS_Gigantized</hediffName>
+				<animalsOnly>true</animalsOnly>
+				<humanoidsOnly>false</humanoidsOnly>
+			</li>
+		</comps>
+		<recipeMaker>
+			<researchPrerequisite>BS_AnimalGrowthSerums</researchPrerequisite>
+			<recipeUsers>
+				<li>DrugLab</li>
+			</recipeUsers>
+			<soundWorking>Recipe_Drug</soundWorking>
+			<skillRequirements>
+				<Crafting>6</Crafting>
+				<Intellectual>8</Intellectual>
+			</skillRequirements>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+		</recipeMaker>
+		<costList>
+			<Neutroamine>4</Neutroamine>
+			<MedicineUltratech>4</MedicineUltratech>
+			<ComponentSpacer>1</ComponentSpacer>
+			<!-- <MechSerumHealer>1</MechSerumHealer> -->
+			<!-- <MedicineHerbal>1</MedicineHerbal> -->
+		</costList>
+	</ThingDef>
+</Defs>
