@@ -3,7 +3,7 @@
 		<defName>SC_Infection</defName>
 		<hediffClass>StrainCultures.Hediffs.Infection</hediffClass>
 		<label>Infection</label>
-		<description>This person has a infection with untold consequences.</description>
+		<description>This person has an infection with untold consequences.</description>
 		<isBad>true</isBad>
 		<everCurableByItem>false</everCurableByItem>
 		<initialSeverity>1</initialSeverity>

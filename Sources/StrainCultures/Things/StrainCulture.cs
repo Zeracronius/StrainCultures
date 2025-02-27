@@ -8,7 +8,7 @@ using Verse;
 
 namespace StrainCultures.Things
 {
-	public class StrainCulture : Thing
+	public class StrainCulture : ThingWithComps
 	{
 		public StrainCulture()
 		{

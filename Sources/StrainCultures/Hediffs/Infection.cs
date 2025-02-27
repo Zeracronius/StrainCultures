@@ -1,4 +1,5 @@
-﻿using StrainCultures.Things;
+﻿using StrainCultures.Defs;
+using StrainCultures.Things;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +17,19 @@ namespace StrainCultures.Hediffs
 		private StrainCulture _strain;
 
 #pragma warning disable CS8618
+		[Obsolete("Use ApplyInfection static method instead.", true)]
 		public Infection()
 		{
-			
 		}
 #pragma warning restore CS8618
 
-		public Infection(StrainCulture strainCulture)
+		public static Infection ApplyInfection(StrainCulture strainCulture, Pawn pawn, BodyPartRecord? partRecord = null)
 		{
-			_strain = strainCulture;
+
+			Infection hediff = (Infection)HediffMaker.MakeHediff(DefOfStrains.SC_Infection, pawn, partRecord);
+			hediff._strain = strainCulture;
+			pawn.health.AddHediff(hediff);
+			return hediff;
 		}
 
 		// Infection has been applied to a pawn.

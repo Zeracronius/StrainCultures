@@ -1,10 +1,11 @@
 <Defs>
 	<ThingDef Name="Strain_StrainCulture" ParentName="ResourceBase">
 		<defName>Strain_StrainCulture</defName>
+		<thingClass>StrainCultures.Things.StrainCulture</thingClass>
 		<label>Strain culture</label>
 		<description>Viral material that can be used to replicate the virus.</description>
 		<graphicData>
-			<texPath>Item/Serum/BS_Giantizer</texPath>
+			<texPath>Things/Item/Special/MechSerumHealer</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<stackLimit>500</stackLimit>
@@ -21,39 +22,19 @@
 		<tradeability>None</tradeability>
 		<comps>
 			<li Class="CompProperties_Usable">
-				<useJob>UseItem</useJob>
-				<useLabel>Use {0_label}</useLabel>
-				<useDuration>0</useDuration>
+				<useJob>BS_UseOnTarget</useJob>
+				<useLabel>Inject {0_label}</useLabel>
+				<useDuration>600</useDuration>
 				<warmupMote>Mote_ResurrectAbility</warmupMote>
+			</li>
+			<li Class="BigAndSmall.CompProperties_UseConditionQuantity">
+				<quantity>10</quantity>
+				<failMessage>Needs at least 10 to inject.</failMessage>
 			</li>
 			<li Class="CompProperties_Targetable">
 				<compClass>CompTargetable_SinglePawn</compClass>
 			</li>
-
-			<li Class="BigAndSmall.CompProperties_TargetEffectApplySerum">
-				<hediffName>BS_Gigantized</hediffName>
-				<animalsOnly>true</animalsOnly>
-				<humanoidsOnly>false</humanoidsOnly>
-			</li>
+			<li Class="StrainCultures.Comps.CompProperties_InjectStrainCulture" />
 		</comps>
-		<recipeMaker>
-			<researchPrerequisite>BS_AnimalGrowthSerums</researchPrerequisite>
-			<recipeUsers>
-				<li>DrugLab</li>
-			</recipeUsers>
-			<soundWorking>Recipe_Drug</soundWorking>
-			<skillRequirements>
-				<Crafting>6</Crafting>
-				<Intellectual>8</Intellectual>
-			</skillRequirements>
-			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-		</recipeMaker>
-		<costList>
-			<Neutroamine>4</Neutroamine>
-			<MedicineUltratech>4</MedicineUltratech>
-			<ComponentSpacer>1</ComponentSpacer>
-			<!-- <MechSerumHealer>1</MechSerumHealer> -->
-			<!-- <MedicineHerbal>1</MedicineHerbal> -->
-		</costList>
 	</ThingDef>
 </Defs>
