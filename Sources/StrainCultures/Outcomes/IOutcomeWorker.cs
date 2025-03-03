@@ -8,11 +8,8 @@ using Verse;
 
 namespace StrainCultures.Outcomes
 {
-	internal class RaceOutcome : IOutcomeWorker
+	public interface IOutcomeWorker
 	{
-		public bool ApplyOutcome(Pawn target, Infection infection, Mutated? mutated)
-		{
-			throw new NotImplementedException();
-		}
+		bool ApplyOutcome(Pawn target, Infection infection, Mutated? mutated);
 	}
 }

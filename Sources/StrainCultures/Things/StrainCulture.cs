@@ -1,4 +1,5 @@
-﻿using StrainCultures.Outcomes;
+﻿using StrainCultures.Hediffs;
+using StrainCultures.Outcomes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,13 @@ namespace StrainCultures.Things
 			
 		}
 
+		public float Saturation = 200;
+
+		/// <summary>
+		/// value used to interpolate resulting influences when extracted from a pawn.
+		/// </summary>
+		public float Mallability = 0.5f;
+
 		/// <summary>
 		/// Stability ratio. positive is stable, negative is unstable.
 		/// </summary>
@@ -42,7 +50,7 @@ namespace StrainCultures.Things
 		/// <summary>
 		/// How likely the virus is to be resisted, and the speed effects are applied.
 		/// </summary>
-		public float Potency = 0;
+		public float Potency = 1;
 
 		/// <summary>
 		/// How likely the virus is to reinfect the host with itself.
@@ -52,7 +60,12 @@ namespace StrainCultures.Things
 		/// <summary>
 		/// Collection of outcomes caused by this infection.
 		/// </summary>
-		public List<IOutcome> Outcomes = new List<IOutcome>();
+		public List<IOutcomeWorker> Outcomes = new List<IOutcomeWorker>();
+
+		/// <summary>
+		/// Weight values for the association to a given tag.
+		/// </summary>
+		Dictionary<string, int> Influences = new Dictionary<string, int>();
 
 		public override void ExposeData()
 		{
@@ -64,6 +77,21 @@ namespace StrainCultures.Things
 			Scribe_Values.Look(ref Potency, "potency");
 			Scribe_Values.Look(ref PropagationChance, "propagationChance");
 			Scribe_Collections.Look(ref Outcomes, "outcomes", LookMode.Deep);
+			Scribe_Collections.Look(ref Influences, "tagAssociations", LookMode.Value, LookMode.Value);
 		}
+
+		public bool TriggerOutcome(Pawn target, Infection infection, Mutated? mutated)
+		{
+			Log.Message("Outcomes were triggered!");
+			int count = Outcomes.Count;
+			List<IOutcomeWorker> outcomes = Outcomes;
+			for (int i = 0; i < count; i++)
+			{
+				if (outcomes[i].ApplyOutcome(target, infection, mutated))
+					return true;
+			}
+			return false;
+		}
+
 	}
 }

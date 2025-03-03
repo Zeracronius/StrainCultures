@@ -11,7 +11,7 @@ namespace StrainCultures.Hediffs
 	/// <summary>
 	/// Contains and handles all the mutations applied to a pawn, and is responsible for drawing them.
 	/// </summary>
-	internal class Mutated : Hediff
+	public class Mutated : Hediff
 	{
 		private List<Mutation> _mutations = new();
 
