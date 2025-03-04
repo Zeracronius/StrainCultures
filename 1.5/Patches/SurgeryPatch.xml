@@ -1,0 +1,14 @@
+<Patch>
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[@Name="Human"]/recipes</xpath>
+    <value>
+      <li>SC_ExtractCulture</li>
+    </value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[@Name="AnimalThingBase"]/recipes</xpath>
+    <value>
+      <li>SC_ExtractCulture</li>
+    </value>
+  </Operation>
+</Patch>

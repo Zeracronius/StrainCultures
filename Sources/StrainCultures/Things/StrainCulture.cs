@@ -1,4 +1,5 @@
-﻿using StrainCultures.Hediffs;
+﻿using RimWorld;
+using StrainCultures.Hediffs;
 using StrainCultures.Outcomes;
 using System;
 using System.Collections.Generic;
@@ -11,18 +12,38 @@ namespace StrainCultures.Things
 {
 	public class StrainCulture : ThingWithComps
 	{
+		private static int _nextID = 0;
+		private int _id = 0;
+
+		private string? _label;
+
 		public StrainCulture()
+			: base()
 		{
-			
 		}
+
 
 		/// <summary>
 		/// Create a new variant of a given strain.
 		/// </summary>
 		/// <param name="strain"></param>
 		public StrainCulture(StrainCulture strain)
+			: base()
 		{
-			
+			def = strain.def;
+			_id = ++_nextID;
+			Saturation = strain.Saturation;
+			Mallability = strain.Mallability;
+			Stability = strain.Stability;
+			IncubationPeriodHours = strain.IncubationPeriodHours;
+			FallOffHours = strain.FallOffHours;
+			Potency = strain.Potency;
+			PropagationChance = strain.PropagationChance;
+			Influences = new Dictionary<string, int>(strain.Influences);
+			Outcomes = new List<IOutcomeWorker>(strain.Outcomes);
+
+			PostMake();
+			PostPostMake();
 		}
 
 		public float Saturation = 200;
@@ -67,10 +88,44 @@ namespace StrainCultures.Things
 		/// </summary>
 		Dictionary<string, int> Influences = new Dictionary<string, int>();
 
+		public override bool CanStackWith(Thing other)
+		{
+			// Prevent stacking with items of a different strain.
+			if (_id != (other as StrainCulture)?._id)
+				return false;
+
+			return base.CanStackWith(other);
+		}
+
+		public override string LabelNoCount
+		{
+			get
+			{
+				if (_label == null)
+				{
+					_label = GenLabel.ThingLabel(this, 1);
+					if (_id > 0)
+						_label += " (Strain " + _id + ")";
+				}
+				return _label;
+			}
+		}
+
+		public override TipSignal GetTooltip()
+		{
+			return base.GetTooltip();
+
+			//TODO Add descriptive tooltip for strain culture details.
+		}
+
 		public override void ExposeData()
 		{
-			base.ExposeData();
+			base.ExposeData(); 
+			// While this is static it should be identical for all instances and not matter.
+			Scribe_Values.Look(ref _nextID, "_nextID");
 
+
+			Scribe_Values.Look(ref _id, "_id");
 			Scribe_Values.Look(ref Stability, "stability");
 			Scribe_Values.Look(ref IncubationPeriodHours, "incubationPeriodHours");
 			Scribe_Values.Look(ref FallOffHours, "fallOffHours");

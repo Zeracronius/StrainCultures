@@ -2,7 +2,7 @@
 	<ThingDef Name="Strain_StrainCulture" ParentName="ResourceBase">
 		<defName>Strain_StrainCulture</defName>
 		<thingClass>StrainCultures.Things.StrainCulture</thingClass>
-		<label>Strain culture</label>
+		<label>Culture</label>
 		<description>Viral material that can be used to replicate the virus.</description>
 		<graphicData>
 			<texPath>Things/Item/Special/MechSerumHealer</texPath>

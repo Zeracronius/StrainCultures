@@ -1,0 +1,14 @@
+<Defs>
+  <RecipeDef>
+    <defName>SC_ExtractCulture</defName>
+    <label>Extract strain culture.</label>
+    <description>Extract strain culture from inert infections.</description>
+    <workerClass>StrainCultures.RecipeWorkers.Surgeries.ExtractStrainCultureWorker</workerClass>
+    <jobString>Extracting culture.</jobString>
+    <targetsBodyPart>false</targetsBodyPart>
+    <anesthetize>false</anesthetize>
+    <workAmount>600</workAmount>
+    <dontShowIfAnyIngredientMissing>false</dontShowIfAnyIngredientMissing>
+    <surgeryOutcomeEffect IsNull="True"/>
+  </RecipeDef>
+</Defs>

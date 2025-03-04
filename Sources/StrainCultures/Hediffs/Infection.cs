@@ -30,6 +30,8 @@ namespace StrainCultures.Hediffs
 		private string _stateLabel = "";
 		private int _incubatingTicks = 0;
 
+		public InfectionState State => _state;
+
 #pragma warning disable CS8618
 		[Obsolete("Use ApplyInfection static method instead.", true)]
 		public Infection()
@@ -40,7 +42,9 @@ namespace StrainCultures.Hediffs
 		public static Infection ApplyInfection(StrainCulture strainCulture, Pawn pawn, BodyPartRecord? partRecord = null)
 		{
 			Infection hediff = (Infection)HediffMaker.MakeHediff(DefOfStrains.SC_Infection, pawn, partRecord);
-			hediff._strain = strainCulture;
+			
+			// Create new strain
+			hediff._strain = new StrainCulture(strainCulture);
 			pawn.health.AddHediff(hediff);
 			return hediff;
 		}
@@ -55,28 +59,29 @@ namespace StrainCultures.Hediffs
 			// If incubation period is actually 0, then skip directly to active.
 			InfectionState newState = _strain.IncubationPeriodHours == 0 ? InfectionState.Active : InfectionState.Incubating;
 			ChangeState(newState);
-			Scheduling.EventScheduler.QueueEvent(GetTicksToNextEvent(), this);
+			ScheduleNextEvent();
+
+			// Plan for going inert
+			int inertInTicks = _strain.FallOffHours * Utilities.TimeMetrics.TICKS_PER_HOUR + _incubatingTicks;
+			Scheduling.EventScheduler.QueueEvent(inertInTicks, this, "Inert");
 		}
 
 		/// <summary>
-		/// Returns the number of ticks until the next event based on infection state.
-		/// Incubating will return the incubation period in ticks.
-		/// Active will return the minimum ticks between outcomes.
-		/// Inert will return 0 to disable scheduling.
+		/// Queues the next event based on the current state.
 		/// </summary>
 		/// <returns></returns>
-		private int GetTicksToNextEvent()
+		private void ScheduleNextEvent()
 		{
 			switch (_state)
 			{
 				case InfectionState.Incubating:
-					return _incubatingTicks;
+					Scheduling.EventScheduler.QueueEvent(_incubatingTicks, this, "Incubating");
+					return;
 
 				case InfectionState.Active:
-					return (int)_infectionDef.minimumTicksBetweenOutcomeCurve.Evaluate(_strain.Potency);
-
-				default:
-					return 0;
+					int ticksToNextEvent = (int)_infectionDef.minimumTicksBetweenOutcomeCurve.Evaluate(_strain.Potency);
+					Scheduling.EventScheduler.QueueEvent(ticksToNextEvent, this);
+					return;
 			}
 		}
 
@@ -118,34 +123,47 @@ namespace StrainCultures.Hediffs
 
 		public void HandleEvent(string? signal)
 		{
-			Mod.Logging.Message("Health event");
 			if (_state == InfectionState.Inert)
 				return;
 
 			// First event that happens will always be when infection is done incubating.
-			if (_state == InfectionState.Incubating)
+			if (_state == InfectionState.Incubating && signal == "Incubating")
 				ChangeState(InfectionState.Active);
 
 			// Get falloff ticks every time since this can shift as strain evolves.
 			int falloffTicks = _strain.FallOffHours * Utilities.TimeMetrics.TICKS_PER_HOUR;
-			if (ageTicks > falloffTicks + _incubatingTicks)
+			if (ageTicks >= falloffTicks + _incubatingTicks)
 			{
 				// Change state to inert and disable scheduling.
 				ChangeState(InfectionState.Inert);
 				return;
 			}
 
-			int ticksToNextEvent = GetTicksToNextEvent();
+			if (signal != "Inert")
+			{
+				// If new or infection is younger than the total period of incubation + falloff, then trigger outcome.
+				bool result = _strain.TriggerOutcome(pawn, this, pawn.health.hediffSet.GetFirstHediffOfDef(DefOfStrains.SC_Mutated) as Mutated);
 
-			// If new or infection is younger than the total period of incubation + falloff, then trigger outcome.
-			bool result = _strain.TriggerOutcome(pawn, this, pawn.health.hediffSet.GetFirstHediffOfDef(DefOfStrains.SC_Mutated) as Mutated);
+				// If outcome was triggered, try to evolve the strain.
+				if (result)
+					TryEvolveStrain();
 
-			// If outcome was triggered, try to evolve the strain.
-			if (result)
-				TryEvolveStrain();
+				// Schedule next event.
+				ScheduleNextEvent();
+			}
+		}
 
-			// Schedule next event.
-			Scheduling.EventScheduler.QueueEvent(GetTicksToNextEvent(), this);
+		public void ExtractCulture()
+		{
+			if (severityInt > 0)
+			{
+				_strain.ForceSetStateToUnspawned();
+				_strain.stackCount = 1;
+				GenPlace.TryPlaceThing(_strain, pawn.Position, pawn.Map, ThingPlaceMode.Near);
+
+				// Mark for deletion.
+				severityInt = -1;
+			}
 		}
 	}
 }
