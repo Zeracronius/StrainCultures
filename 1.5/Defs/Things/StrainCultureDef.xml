@@ -1,0 +1,40 @@
+<Defs>
+	<ThingDef Name="Strain_StrainCulture" ParentName="ResourceBase">
+		<defName>Strain_StrainCulture</defName>
+		<thingClass>StrainCultures.Things.StrainCulture</thingClass>
+		<label>Culture</label>
+		<description>Viral material that can be used to replicate the virus.</description>
+		<graphicData>
+			<texPath>Things/Item/Special/MechSerumHealer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<stackLimit>500</stackLimit>
+		<statBases>
+			<MaxHitPoints>80</MaxHitPoints>
+			<Mass>0.01</Mass>
+			<DeteriorationRate>10.0</DeteriorationRate>
+			<Flammability>0.2</Flammability>
+			<WorkToMake>100</WorkToMake>
+		</statBases>
+		<thingCategories>
+			<li>ItemsMisc</li>
+		</thingCategories>
+		<tradeability>None</tradeability>
+		<comps>
+			<li Class="CompProperties_Usable">
+				<useJob>BS_UseOnTarget</useJob>
+				<useLabel>Inject {0_label}</useLabel>
+				<useDuration>600</useDuration>
+				<warmupMote>Mote_ResurrectAbility</warmupMote>
+			</li>
+			<li Class="BigAndSmall.CompProperties_UseConditionQuantity">
+				<quantity>10</quantity>
+				<failMessage>Needs at least 10 to inject.</failMessage>
+			</li>
+			<li Class="CompProperties_Targetable">
+				<compClass>CompTargetable_SinglePawn</compClass>
+			</li>
+			<li Class="StrainCultures.Comps.CompProperties_InjectStrainCulture" />
+		</comps>
+	</ThingDef>
+</Defs>

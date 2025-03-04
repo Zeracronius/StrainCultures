@@ -1,0 +1,18 @@
+<Defs>
+	<StrainCultures.InfectionDef>
+		<defName>SC_Infection</defName>
+		<hediffClass>StrainCultures.Hediffs.Infection</hediffClass>
+		<label>Infection</label>
+		<description>This person has an infection with untold consequences.</description>
+		<isBad>true</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<initialSeverity>1</initialSeverity>
+		<minimumTicksBetweenOutcomeCurve>
+          <points>
+            <li>(1, 60000)</li>
+            <li>(2, 20000)</li>
+            <li>(3, 200)</li>
+          </points>
+		</minimumTicksBetweenOutcomeCurve>
+	</StrainCultures.InfectionDef>
+</Defs>

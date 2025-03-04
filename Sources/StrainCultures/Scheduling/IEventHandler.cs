@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrainCultures.Outcomes
+namespace StrainCultures.Scheduling
 {
-	internal class XenotypeOutcome : IOutcome
+	public interface IEventHandler
 	{
+		void HandleEvent(string? signal);
 	}
 }
