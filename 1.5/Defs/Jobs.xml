@@ -1,0 +1,12 @@
+<Defs>
+	<JobDef>
+		<defName>SC_ExtractCultureJob</defName>
+		<driverClass>StrainCultures.Jobs.JobDriver_ExtractCulture</driverClass>
+		<reportString>Extracting culture</reportString>
+	</JobDef>
+	<JobDef>
+		<defName>SC_InsertCultureJob</defName>
+		<driverClass>StrainCultures.Jobs.JobDriver_InsertCulture</driverClass>
+		<reportString>Adding culture</reportString>
+	</JobDef>
+</Defs>

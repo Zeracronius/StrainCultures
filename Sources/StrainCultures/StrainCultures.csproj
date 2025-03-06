@@ -22,5 +22,9 @@
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Jobs\EmptyCulture\" />
+  </ItemGroup>
 
 </Project>
