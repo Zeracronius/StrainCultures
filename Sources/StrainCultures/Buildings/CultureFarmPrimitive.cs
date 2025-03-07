@@ -24,23 +24,21 @@ namespace StrainCultures.Buildings
 
 		}
 
-		public override void ExposeData()
+		public override void PostExposeData()
 		{
-			base.ExposeData();
-
+			base.PostExposeData();
 			Scribe_Values.Look(ref _ticksToCulture, "ticksToCulture");
 		}
 
-		public override void SpawnSetup(Map map, bool respawningAfterLoad)
+		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
-			base.SpawnSetup(map, respawningAfterLoad);
-			_fuelComp = GetComp<CompRefuelable>();
+			base.PostSpawnSetup(respawningAfterLoad);
+			_fuelComp = parent.GetComp<CompRefuelable>();
 		}
 
-		public override void Tick()
+		public override void CompTick()
 		{
-			base.Tick();
-
+			base.CompTick();
 			if (_fuelComp != null && _culture != null)
 			{
 				if (_culture.stackCount == _culture.def.stackLimit)

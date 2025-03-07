@@ -11,7 +11,7 @@ using Verse.AI;
 
 namespace StrainCultures.Buildings
 {
-	public abstract class CultureFarm : Building
+	public abstract class CultureFarm : ThingComp
 	{
 		protected StrainCulture? _culture = null;
 
@@ -22,9 +22,9 @@ namespace StrainCultures.Buildings
 		private Gizmo? _allowManualExtracting;
 		public Job? InsertJob;
 
-		public override void SpawnSetup(Map map, bool respawningAfterLoad)
+		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
-			base.SpawnSetup(map, respawningAfterLoad);
+			base.PostSpawnSetup(respawningAfterLoad);
 
 			_selectCultureGizmo = new Command_Action()
 			{
@@ -44,13 +44,12 @@ namespace StrainCultures.Buildings
 			};
 		}
 
-		public override string GetInspectString()
+		public override string CompInspectStringExtra()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.AppendLine(base.GetInspectString());
 			stringBuilder.AppendLine("Culture: " + (_culture == null ? "Empty" : _culture.LabelCapNoCount));
-			stringBuilder.AppendLine("Filled: " + Filled.ToStringPercent());
-			return stringBuilder.ToString().TrimEndNewlines();
+			stringBuilder.Append("Filled: " + Filled.ToStringPercent());
+			return stringBuilder.ToString();
 		}
 
 
@@ -123,19 +122,15 @@ namespace StrainCultures.Buildings
 			}
 		}
 
-		public override IEnumerable<Gizmo> GetGizmos()
+		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			foreach (var item in base.GetGizmos())
-			{
-				yield return item;
-			}
 			yield return _selectCultureGizmo!;
 			yield return _allowManualExtracting!;
 		}
 
-		public override void ExposeData()
+		public override void PostExposeData()
 		{
-			base.ExposeData();
+			base.PostExposeData();
 			Scribe_Deep.Look(ref _culture, "_culture");
 			Scribe_Values.Look(ref AllowManualExtracting, "allowManualExtracting");
 			Scribe_Values.Look(ref ExtractAtFilled, "extractAtFilled");
@@ -143,7 +138,7 @@ namespace StrainCultures.Buildings
 
 		protected virtual void OnSelectCultureGizmo()
 		{
-			IEnumerable<StrainCulture> cultureThingsOnMap = Map.listerThings.GetThingsOfType<StrainCulture>();
+			IEnumerable<StrainCulture> cultureThingsOnMap = parent.Map.listerThings.GetThingsOfType<StrainCulture>();
 
 			List<FloatMenuOption> options = new List<FloatMenuOption>();
 			foreach (StrainCulture culture in cultureThingsOnMap)
@@ -154,7 +149,7 @@ namespace StrainCultures.Buildings
 
 				FloatMenuOption option = new FloatMenuOption(culture.LabelCapNoCount, () =>
 				{
-					InsertJob = JobMaker.MakeJob(DefOfStrains.SC_InsertCultureJob, culture, this);
+					InsertJob = JobMaker.MakeJob(DefOfStrains.SC_InsertCultureJob, culture, parent);
 				});
 				options.Add(option);
 			}
