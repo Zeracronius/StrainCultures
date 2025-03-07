@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using StrainCultures.Comps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,8 @@ namespace StrainCultures.Jobs
 			if (TargetThingA is not Things.StrainCulture)
 				return false;
 
-			if (TargetThingB is not Buildings.CultureFarm)
+			CompCultureFarm farm = TargetThingB.TryGetComp<CompCultureFarm>();
+			if (farm == null)
 				return false;
 
 			// Reserve 1 strain culture sample
@@ -54,7 +56,7 @@ namespace StrainCultures.Jobs
 			Toil insertToil = ToilMaker.MakeToil();
 			insertToil.initAction = () =>
 			{
-				Buildings.CultureFarm farm = (Buildings.CultureFarm)TargetThingB;
+				CompCultureFarm farm = TargetThingB.TryGetComp<CompCultureFarm>();
 				farm.EmptyCulture(pawn);
 				farm.InsertCulture((Things.StrainCulture)pawn.carryTracker.CarriedThing);
 			};

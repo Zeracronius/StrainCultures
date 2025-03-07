@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using StrainCultures.Comps;
 using StrainCultures.Defs;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,37 @@ namespace StrainCultures.Jobs
 	/// </summary>
 	internal class WorkGiver_ExtractCulture : WorkGiver_Scanner
 	{
+		List<ThingDef>? _farmDefs = null;
+		List<Thing> _things = new List<Thing>();
+
+
 		// Get all colony culture farms on map from buildings cache.
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
-			return pawn.Map.listerBuildings.AllBuildingsColonistOfClass<Buildings.CultureFarm>();
+			if (_farmDefs == null)
+			{
+				_farmDefs = new List<ThingDef>();
+				foreach (var thingDef in DefDatabase<ThingDef>.AllDefsListForReading)
+				{
+					if (thingDef.comps.Any(x => x is CompProperties_CultureFarm))
+						_farmDefs.Add(thingDef);
+				}
+			}
+
+			// Find all current buildings matching a def that has a culture farm comp.
+			_things.Clear();
+			for (int i = _farmDefs.Count - 1; i >= 0; i--)
+				_things.AddRange(pawn.Map.listerBuildings.AllBuildingsColonistOfDef(_farmDefs[i]));
+
+			return _things;
 		}
 
 		// Check if pawn can extract culture from a culture farm.
 		public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
-			if (t is not Buildings.CultureFarm farm)
+			CompCultureFarm farm = t.TryGetComp<CompCultureFarm>();
+
+			if (farm == null)
 				return false;
 
 			if (farm.ShouldExtract == false)

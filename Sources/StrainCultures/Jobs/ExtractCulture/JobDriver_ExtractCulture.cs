@@ -15,10 +15,12 @@ namespace StrainCultures.Jobs
 
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			if (TargetThingA is not Buildings.CultureFarm)
+			Comps.CompCultureFarm farm = TargetThingA.TryGetComp<Comps.CompCultureFarm>();
+
+			if (farm == null)
 				return false;
 
-			if (((Buildings.CultureFarm)TargetThingA).HasCulture == false)
+			if (farm.HasCulture == false)
 				return false;
 
 			// Reserve culture farm building
@@ -41,7 +43,11 @@ namespace StrainCultures.Jobs
 				.FailOnDespawnedOrNull(TargetIndex.A);
 
 			Toil extractToil = ToilMaker.MakeToil();
-			extractToil.initAction = () => ((Buildings.CultureFarm)TargetThingA).ExtractCulture(pawn);
+			extractToil.initAction = () =>
+			{
+				Comps.CompCultureFarm farm = TargetThingA.TryGetComp<Comps.CompCultureFarm>();
+				farm?.ExtractCulture(pawn);
+			};
 			yield return extractToil;
 		}
 	}

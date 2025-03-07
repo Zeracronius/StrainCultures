@@ -9,9 +9,17 @@ using System.Threading.Tasks;
 using Verse;
 using Verse.AI;
 
-namespace StrainCultures.Buildings
+namespace StrainCultures.Comps
 {
-	public abstract class CultureFarm : ThingComp
+	public abstract class CompProperties_CultureFarm : CompProperties
+	{
+		public CompProperties_CultureFarm()
+		{
+			compClass = typeof(CompCultureFarm);
+		}
+	}
+
+	public abstract class CompCultureFarm : ThingComp
 	{
 		protected StrainCulture? _culture = null;
 
