@@ -9,7 +9,7 @@
     <castEdgeShadows>true</castEdgeShadows>
     <minifiedDef>MinifiedThing</minifiedDef>
     <drawerType>MapMeshAndRealTime</drawerType>
-    <tickerType>Normal</tickerType>
+    <tickerType>Rare</tickerType>
     <altitudeLayer>Building</altitudeLayer>
     <thingCategories>
       <li>BuildingsProduction</li>
@@ -82,13 +82,9 @@
     <constructionSkillPrerequisite>4</constructionSkillPrerequisite>
     <comps>
       <li Class="StrainCultures.Comps.CompProperties_PrimitiveCultureFarm">
-        <ticksPerCulture>50</ticksPerCulture>
-        <fuelPerCulture>0.1</fuelPerCulture>
-      </li>
-      <li Class="CompProperties_TemperatureRuinable">
-        <minSafeTemperature>-1</minSafeTemperature>
-        <maxSafeTemperature>32</maxSafeTemperature>
-        <progressPerDegreePerTick>0.00001</progressPerDegreePerTick>
+        <culturePerGrowth>5</culturePerGrowth>
+        <fuelPerGrowth>1</fuelPerGrowth>
+        <affectedByTemperature>true</affectedByTemperature>
       </li>
       <li Class="CompProperties_Refuelable">
         <fuelCapacity>150.0</fuelCapacity>

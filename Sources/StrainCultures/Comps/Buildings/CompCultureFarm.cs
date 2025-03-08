@@ -17,6 +17,9 @@ namespace StrainCultures.Comps
 		{
 			compClass = typeof(CompCultureFarm);
 		}
+
+		public bool affectedByTemperature = false;
+		public int culturePerGrowth = 5;
 	}
 
 	public abstract class CompCultureFarm : ThingComp
@@ -25,10 +28,12 @@ namespace StrainCultures.Comps
 
 		public bool AllowManualExtracting = true;
 		public float ExtractAtFilled = 0.8f; // Extract at 80% filled.
+		public Job? InsertJob;
+
+		private float _progressToCulture = 0;
 
 		private Gizmo? _selectCultureGizmo;
 		private Gizmo? _allowManualExtracting;
-		public Job? InsertJob;
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
@@ -56,8 +61,61 @@ namespace StrainCultures.Comps
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine("Culture: " + (_culture == null ? "Empty" : _culture.LabelCapNoCount));
-			stringBuilder.Append("Filled: " + Filled.ToStringPercent());
-			return stringBuilder.ToString();
+			stringBuilder.AppendLine("Filled: " + Filled.ToStringPercent());
+			stringBuilder.AppendLine("Temperature growth multiplier: " + GetTemperatureGrowthMultiplier().ToStringPercent());
+			return stringBuilder.ToString().TrimEndNewlines();
+		}
+
+		protected float GetTemperatureGrowthMultiplier()
+		{
+			return _culture?.growthTemperatureMultiplier.Evaluate(parent.AmbientTemperature) ?? 0;
+		}
+
+		protected virtual bool CanGrow()
+		{
+			// No culture
+			if (_culture == null)
+				return false;
+
+			// Full
+			if (_culture.stackCount == _culture.def.stackLimit)
+				return false;
+
+			CompProperties_PrimitiveCultureFarm properties = (CompProperties_PrimitiveCultureFarm)props;
+			if (properties.affectedByTemperature)
+			{
+				if (GetTemperatureGrowthMultiplier() <= 0)
+					return false;
+			}
+
+			return true;
+		}
+
+		protected virtual void OnCultureGrown()
+		{
+		}
+
+		/// <summary>
+		/// Triggered every 250 ticks. See <see cref="Utilities.TimeMetrics.TICKS_RARE"/>.
+		/// </summary>
+		public override void CompTickRare()
+		{
+			base.CompTickRare();
+			if (CanGrow() == false)
+				return;
+
+			if (_culture != null)
+			{
+				_progressToCulture += (int)(((CompProperties_PrimitiveCultureFarm)props).culturePerGrowth * GetTemperatureGrowthMultiplier());
+
+				if (_progressToCulture > 1)
+				{
+					int newCulture = (int)_progressToCulture;
+					_progressToCulture -= newCulture;
+					_culture.stackCount += newCulture;
+					OnCultureGrown();
+				}
+			}
 		}
 
 
@@ -142,6 +200,7 @@ namespace StrainCultures.Comps
 			Scribe_Deep.Look(ref _culture, "_culture");
 			Scribe_Values.Look(ref AllowManualExtracting, "allowManualExtracting");
 			Scribe_Values.Look(ref ExtractAtFilled, "extractAtFilled");
+			Scribe_Values.Look(ref _progressToCulture, "progressToCulture");
 		}
 
 		protected virtual void OnSelectCultureGizmo()

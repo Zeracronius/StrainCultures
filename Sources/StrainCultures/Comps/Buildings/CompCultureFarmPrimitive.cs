@@ -16,80 +16,41 @@ namespace StrainCultures.Comps
 			compClass = typeof(CompCultureFarmPrimitive);
 		}
 
-		public int ticksPerCulture = 50;
-		public float fuelPerCulture = 0.1f;
+		public float fuelPerGrowth = 0.1f;
 	}
 
 	public class CompCultureFarmPrimitive : CompCultureFarm
 	{
-		CompProperties_PrimitiveCultureFarm? _cultureProperties;
-		CompTemperatureRuinable? _temperatureComp;
 		CompRefuelable? _fuelComp;
-		float _fuelPerTick = 0;
-		int _ticksToCulture = 0;
 
 		public CompCultureFarmPrimitive()
 		{
 
 		}
 
-		public override void PostExposeData()
-		{
-			base.PostExposeData();
-			Scribe_Values.Look(ref _ticksToCulture, "ticksToCulture");
-		}
-
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
 			_fuelComp = parent.GetComp<CompRefuelable>();
-			_temperatureComp = parent.GetComp<CompTemperatureRuinable>();
-
-			_cultureProperties = (CompProperties_PrimitiveCultureFarm)props;
-
-			_fuelPerTick = _cultureProperties.fuelPerCulture / _cultureProperties.ticksPerCulture;
-			_ticksToCulture = _cultureProperties.ticksPerCulture;
 		}
 
-		public override void CompTick()
+		protected override bool CanGrow()
 		{
-			base.CompTick();
-			// No culture
-			if (_culture == null)
-				return;
-
-			// Full
-			if (_culture.stackCount == _culture.def.stackLimit)
-				return;
+			if (base.CanGrow() == false)
+				return false;
 
 			// Has fuel comp.
-			if (_fuelComp != null)
-			{
-				if (_fuelComp.Fuel > _fuelPerTick)
-				{
-					_fuelComp.ConsumeFuel(_fuelPerTick);
-				}
-				else
-				{
-					return;
-				}
-			}
+			float fuelPerGrowth = ((CompProperties_PrimitiveCultureFarm)props).fuelPerGrowth;
+			if (_fuelComp?.Fuel < fuelPerGrowth)
+				return false;
 
-			// Has temperature comp.
-			if (_temperatureComp != null)
-			{
-				if (_temperatureComp.Ruined)
-				{
-					return;
-				}
-			}
+			return true;
+		}
 
-			_ticksToCulture--;
-			if (_ticksToCulture <= 0)
-			{
-				_culture.stackCount += 1;
-				_ticksToCulture = _cultureProperties!.ticksPerCulture;
-			}
+		protected override void OnCultureGrown()
+		{
+			float fuelPerGrowth = ((CompProperties_PrimitiveCultureFarm)props).fuelPerGrowth;
+			_fuelComp?.ConsumeFuel(fuelPerGrowth);
 		}
 	}
 }
