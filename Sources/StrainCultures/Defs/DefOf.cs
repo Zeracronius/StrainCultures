@@ -18,5 +18,8 @@ namespace StrainCultures.Defs
 
 		public static HediffDef? SC_Infection;
 		public static HediffDef? SC_Mutated;
+
+		public static JobDef? SC_ExtractCultureJob;
+		public static JobDef? SC_InsertCultureJob;
 	}
 }
