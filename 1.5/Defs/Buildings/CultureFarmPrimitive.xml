@@ -3,7 +3,6 @@
     <defName>SC_CultureFarmPrimitive</defName>
     <label>Primitive culture farm</label>
     <description>A primitive building to farm strain culture. Requires nutritions, reasonable temperature and hard work to function.</description>
-    <thingClass>StrainCultures.Buildings.CultureFarmPrimitive</thingClass>
     <passability>PassThroughOnly</passability>
     <fillPercent>0.45</fillPercent>
     <pathCost>42</pathCost>
@@ -82,6 +81,10 @@
     </building>
     <constructionSkillPrerequisite>4</constructionSkillPrerequisite>
     <comps>
+      <li Class="StrainCultures.Comps.CompProperties_PrimitiveCultureFarm">
+        <ticksPerCulture>50</ticksPerCulture>
+        <fuelPerCulture>0.1</fuelPerCulture>
+      </li>
       <li Class="CompProperties_TemperatureRuinable">
         <minSafeTemperature>-1</minSafeTemperature>
         <maxSafeTemperature>32</maxSafeTemperature>
@@ -92,6 +95,7 @@
         <targetFuelLevelConfigurable>true</targetFuelLevelConfigurable>
         <initialConfigurableTargetFuelLevel>75</initialConfigurableTargetFuelLevel>
         <externalTicking>true</externalTicking>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
         <fuelFilter>
           <thingDefs>
             <li>Kibble</li>

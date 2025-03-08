@@ -16,13 +16,14 @@ namespace StrainCultures.Comps
 			compClass = typeof(CompCultureFarmPrimitive);
 		}
 
-		public int TicksPerCulture = 50;
-		public float FuelPerCulture = 0.1f;
+		public int ticksPerCulture = 50;
+		public float fuelPerCulture = 0.1f;
 	}
 
 	public class CompCultureFarmPrimitive : CompCultureFarm
 	{
 		CompProperties_PrimitiveCultureFarm? _cultureProperties;
+		CompTemperatureRuinable? _temperatureComp;
 		CompRefuelable? _fuelComp;
 		float _fuelPerTick = 0;
 		int _ticksToCulture = 0;
@@ -42,32 +43,52 @@ namespace StrainCultures.Comps
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
 			_fuelComp = parent.GetComp<CompRefuelable>();
+			_temperatureComp = parent.GetComp<CompTemperatureRuinable>();
 
 			_cultureProperties = (CompProperties_PrimitiveCultureFarm)props;
 
-			_fuelPerTick = _cultureProperties.FuelPerCulture / _cultureProperties.TicksPerCulture;
-			_ticksToCulture = _cultureProperties.TicksPerCulture;
+			_fuelPerTick = _cultureProperties.fuelPerCulture / _cultureProperties.ticksPerCulture;
+			_ticksToCulture = _cultureProperties.ticksPerCulture;
 		}
 
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (_fuelComp != null && _culture != null)
-			{
-				if (_culture.stackCount == _culture.def.stackLimit)
-					return;
+			// No culture
+			if (_culture == null)
+				return;
 
+			// Full
+			if (_culture.stackCount == _culture.def.stackLimit)
+				return;
+
+			// Has fuel comp.
+			if (_fuelComp != null)
+			{
 				if (_fuelComp.Fuel > _fuelPerTick)
 				{
 					_fuelComp.ConsumeFuel(_fuelPerTick);
-					_ticksToCulture--;
 				}
-
-				if (_ticksToCulture <= 0)
+				else
 				{
-					_culture.stackCount += 1;
-					_ticksToCulture = _cultureProperties!.TicksPerCulture;
+					return;
 				}
+			}
+
+			// Has temperature comp.
+			if (_temperatureComp != null)
+			{
+				if (_temperatureComp.Ruined)
+				{
+					return;
+				}
+			}
+
+			_ticksToCulture--;
+			if (_ticksToCulture <= 0)
+			{
+				_culture.stackCount += 1;
+				_ticksToCulture = _cultureProperties!.ticksPerCulture;
 			}
 		}
 	}

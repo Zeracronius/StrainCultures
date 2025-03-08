@@ -35,6 +35,7 @@ namespace StrainCultures.Scheduling
 		{
 			this.game = game;
 			_instance = this;
+			_tickManager = game.tickManager;
 		}
 
 		public override void GameComponentTick()
@@ -90,11 +91,6 @@ namespace StrainCultures.Scheduling
 		{
 			base.ExposeData();
 			Scribe_Collections.Look(ref _scheduledEvents, "scheduledEvents", LookMode.Value, LookMode.Value);
-		}
-
-		public override void LoadedGame()
-		{
-			_tickManager = Find.TickManager;
 		}
 
 		public static void QueueEvent(int ticksFromNow, IEventHandler handler, string? signal = null)
