@@ -1,0 +1,20 @@
+<Defs>
+	<WorkGiverDef>
+		<defName>SC_ExtractCultureWorkGiver</defName>
+		<label>Extract culture</label>
+		<giverClass>StrainCultures.Jobs.WorkGiver_ExtractCulture</giverClass>
+		<workType>Hauling</workType>
+		<verb>Extract</verb>
+		<gerund>Extracting</gerund>
+		<priorityInType>600</priorityInType>
+	</WorkGiverDef>
+	<WorkGiverDef>
+		<defName>SC_InsertCultureWorkGiver</defName>
+		<label>Insert culture</label>
+		<giverClass>StrainCultures.Jobs.WorkGiver_InsertCulture</giverClass>
+		<workType>BasicWorker</workType>
+		<verb>Insert</verb>
+		<gerund>Inserting</gerund>
+		<priorityInType>600</priorityInType>
+	</WorkGiverDef>
+</Defs>

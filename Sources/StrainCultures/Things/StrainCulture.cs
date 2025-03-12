@@ -46,6 +46,13 @@ namespace StrainCultures.Things
 			PostPostMake();
 		}
 
+		public SimpleCurve growthTemperatureMultiplier = new SimpleCurve()
+		{
+			(new CurvePoint(20, 0)),
+			(new CurvePoint(37, 1)),
+			(new CurvePoint(45, 0))
+		};
+
 		public float Saturation = 200;
 
 		/// <summary>

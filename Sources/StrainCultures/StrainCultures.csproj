@@ -10,8 +10,16 @@
 
   <PropertyGroup>
     <OutputPath>..\..\1.5\Assemblies\</OutputPath>
-    <Optimize>True</Optimize>
     <DebugType>None</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>True</Optimize>
+    <DebugType>none</DebugType>
   </PropertyGroup>
   
   <ItemGroup>
@@ -21,6 +29,10 @@
     <PackageReference Include="Lib.Harmony" Version="2.3.5">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Jobs\EmptyCulture\" />
   </ItemGroup>
 
 </Project>
