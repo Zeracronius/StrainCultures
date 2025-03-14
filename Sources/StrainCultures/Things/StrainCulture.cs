@@ -40,18 +40,12 @@ namespace StrainCultures.Things
 			Potency = strain.Potency;
 			PropagationChance = strain.PropagationChance;
 			Influences = new Dictionary<string, int>(strain.Influences);
-			Outcomes = new List<IOutcomeWorker>(strain.Outcomes);
 
 			PostMake();
 			PostPostMake();
 		}
 
-		public SimpleCurve growthTemperatureMultiplier = new SimpleCurve()
-		{
-			(new CurvePoint(20, 0)),
-			(new CurvePoint(37, 1)),
-			(new CurvePoint(45, 0))
-		};
+		public SimpleCurve? growthTemperatureMultiplier => (def as StrainCultureDef)?.growthTemperatureMultiplier;
 
 		public float Saturation = 200;
 
@@ -73,7 +67,7 @@ namespace StrainCultures.Things
 		/// <summary>
 		/// Time it takes for all effects to be applied and the virus to go inert.
 		/// </summary>
-		public int FallOffHours = 1;
+		public int FallOffHours = 12;
 
 		/// <summary>
 		/// How likely the virus is to be resisted, and the speed effects are applied.
@@ -84,11 +78,6 @@ namespace StrainCultures.Things
 		/// How likely the virus is to reinfect the host with itself.
 		/// </summary>
 		public float PropagationChance = 0;
-
-		/// <summary>
-		/// Collection of outcomes caused by this infection.
-		/// </summary>
-		public List<IOutcomeWorker> Outcomes = new List<IOutcomeWorker>();
 
 		/// <summary>
 		/// Weight values for the association to a given tag.
@@ -138,19 +127,21 @@ namespace StrainCultures.Things
 			Scribe_Values.Look(ref FallOffHours, "fallOffHours");
 			Scribe_Values.Look(ref Potency, "potency");
 			Scribe_Values.Look(ref PropagationChance, "propagationChance");
-			Scribe_Collections.Look(ref Outcomes, "outcomes", LookMode.Deep);
 			Scribe_Collections.Look(ref Influences, "tagAssociations", LookMode.Value, LookMode.Value);
 		}
 
 		public bool TriggerOutcome(Pawn target, Infection infection, Mutated? mutated)
 		{
-			Log.Message("Outcomes were triggered!");
-			int count = Outcomes.Count;
-			List<IOutcomeWorker> outcomes = Outcomes;
-			for (int i = 0; i < count; i++)
+			var strainDef = def as StrainCultureDef;
+			if (strainDef != null)
 			{
-				if (outcomes[i].ApplyOutcome(target, infection, mutated))
-					return true;
+				int count = strainDef.outcomeWorkers.Count;
+				List<IOutcomeWorker> outcomes = strainDef.outcomes;
+				for (int i = 0; i < count; i++)
+				{
+					if (outcomes[i].ApplyOutcome(target, infection, mutated))
+						return true;
+				}
 			}
 			return false;
 		}

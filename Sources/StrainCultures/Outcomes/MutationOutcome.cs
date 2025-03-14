@@ -9,11 +9,12 @@ using Verse;
 
 namespace StrainCultures.Outcomes
 {
-	internal class MutationOutcome : IOutcomeWorker
+	public class MutationOutcome : IOutcomeWorker
 	{
 		public bool ApplyOutcome(Pawn target, Infection infection, Mutated? mutated)
 		{
-			throw new NotImplementedException();
+			Mod.Logging.Message("Mutations!");
+			return false;
 		}
 	}
 }
