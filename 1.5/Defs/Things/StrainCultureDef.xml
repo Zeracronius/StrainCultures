@@ -45,7 +45,7 @@
 		</growthTemperatureMultiplier>
 		<outcomeWorkers>
 			<li>StrainCultures.Outcomes.RaceOutcome</li>
-			<li>StrainCultures.Outcomes.XenotypeOutcome</li>
+			<li MayRequire="Ludeon.RimWorld.Biotech">StrainCultures.Outcomes.XenotypeOutcome</li>
 			<li>StrainCultures.Outcomes.MutationOutcome</li>
 		</outcomeWorkers>
 
