@@ -12,7 +12,6 @@ namespace StrainCultures.Outcomes
 	{
 		public bool ApplyOutcome(Pawn target, Infection infection, Mutated? mutated)
 		{
-			Mod.Logging.Message("Race!");
 			return false;
 		}
 	}
