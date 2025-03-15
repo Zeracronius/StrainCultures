@@ -12,7 +12,7 @@ namespace StrainCultures.Scheduling
 		private static EventScheduler? _instance;
 		private static TickManager? _tickManager;
 
-		public struct Event
+		public struct Event : IExposable
 		{
 			public Event(IEventHandler handler, string? signal)
 			{
@@ -22,6 +22,12 @@ namespace StrainCultures.Scheduling
 
 			public IEventHandler Handler;
 			public string? Signal;
+
+			public void ExposeData()
+			{
+				Scribe_References.Look(ref Handler, "handler");
+				Scribe_Values.Look(ref Signal, "signal");
+			}
 		}
 
 		private Stack<Stack<Event>> _recycleBin = new Stack<Stack<Event>>(100);
@@ -90,7 +96,10 @@ namespace StrainCultures.Scheduling
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look(ref _scheduledEvents, "scheduledEvents", LookMode.Value, LookMode.Value);
+
+			List<KeyValuePair<int, Event[]>> keyValuePairs = _scheduledEvents.Select(x => new KeyValuePair<int, Event[]>(x.Key, x.Value.ToArray())).ToList();
+			Scribe_Collections.Look(ref keyValuePairs, "scheduledEvents", LookMode.Value, LookMode.Deep);
+			_scheduledEvents = keyValuePairs.ToDictionary(x => x.Key, x => new Stack<Event>(x.Value));
 		}
 
 		public static void QueueEvent(int ticksFromNow, IEventHandler handler, string? signal = null)

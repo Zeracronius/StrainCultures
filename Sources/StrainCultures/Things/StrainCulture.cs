@@ -1,8 +1,10 @@
 ﻿using RimWorld;
 using StrainCultures.Hediffs;
+using StrainCultures.Mutations;
 using StrainCultures.Outcomes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,13 +35,13 @@ namespace StrainCultures.Things
 			def = strain.def;
 			_id = ++_nextID;
 			Saturation = strain.Saturation;
-			Mallability = strain.Mallability;
+			Mallability = strain.Mallability / 2f;
 			Stability = strain.Stability;
 			IncubationPeriodHours = strain.IncubationPeriodHours;
 			FallOffHours = strain.FallOffHours;
 			Potency = strain.Potency;
 			PropagationChance = strain.PropagationChance;
-			Influences = new Dictionary<string, int>(strain.Influences);
+			Influences = new Dictionary<string, float>(strain.Influences);
 
 			PostMake();
 			PostPostMake();
@@ -52,7 +54,7 @@ namespace StrainCultures.Things
 		/// <summary>
 		/// value used to interpolate resulting influences when extracted from a pawn.
 		/// </summary>
-		public float Mallability = 0.5f;
+		public float Mallability = 2f;
 
 		/// <summary>
 		/// Stability ratio. positive is stable, negative is unstable.
@@ -82,7 +84,45 @@ namespace StrainCultures.Things
 		/// <summary>
 		/// Weight values for the association to a given tag.
 		/// </summary>
-		Dictionary<string, int> Influences = new Dictionary<string, int>();
+		public Dictionary<string, float> Influences = new Dictionary<string, float>();
+
+
+		public void ApplyInfluences(Thing thing)
+		{
+			string defName = thing.def.defName;
+			float value = 0;
+			int influencesCount = Influences.Count;
+			if (Influences.TryGetValue(defName, out value))
+			{
+				// If current influence already exist, exclude from count.
+				influencesCount -= 1;
+			}
+
+			float newValue = UnityEngine.Mathf.Lerp(value, 1f, Mallability);
+			float delta = newValue - value;
+			float averagedDelta = delta / influencesCount;
+
+			foreach (var influence in Influences)
+			{
+				if (influence.Key == defName)
+				{
+					Influences[defName] = newValue;
+				}
+				else
+				{
+					Influences[influence.Key] -= averagedDelta;
+				}
+			}
+
+			// Sanity check only run in debug mode.
+			Debug.Assert(Influences.Values.Sum() == 1f);
+		}
+
+		public void ApplyInfluences(Mutation mutation)
+		{
+			//TODO apply mutation influences logic here.
+		}
+
 
 		public override bool CanStackWith(Thing other)
 		{

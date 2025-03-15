@@ -64,6 +64,8 @@ namespace StrainCultures.Hediffs
 			// Plan for going inert
 			int inertInTicks = _strain.FallOffHours * Utilities.TimeMetrics.TICKS_PER_HOUR + _incubatingTicks;
 			Scheduling.EventScheduler.QueueEvent(inertInTicks, this, "Inert");
+
+			_strain.ApplyInfluences(pawn);
 		}
 
 		/// <summary>
