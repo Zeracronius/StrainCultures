@@ -1,5 +1,5 @@
 <Defs>
-	<ThingDef Name="Strain_StrainCulture" ParentName="ResourceBase">
+	<StrainCultures.StrainCultureDef Name="Strain_StrainCulture" ParentName="ResourceBase">
 		<defName>Strain_StrainCulture</defName>
 		<thingClass>StrainCultures.Things.StrainCulture</thingClass>
 		<label>Culture</label>
@@ -36,5 +36,18 @@
 			</li>
 			<li Class="StrainCultures.Comps.CompProperties_InjectStrainCulture" />
 		</comps>
-	</ThingDef>
+		<growthTemperatureMultiplier>
+			<points>
+				<li>(20, 0)</li>
+				<li>(37, 1)</li>
+				<li>(45, 0)</li>
+			</points>
+		</growthTemperatureMultiplier>
+		<outcomeWorkers>
+			<li>StrainCultures.Outcomes.RaceOutcome</li>
+			<li MayRequire="Ludeon.RimWorld.Biotech">StrainCultures.Outcomes.XenotypeOutcome</li>
+			<li>StrainCultures.Outcomes.MutationOutcome</li>
+		</outcomeWorkers>
+
+	</StrainCultures.StrainCultureDef>
 </Defs>

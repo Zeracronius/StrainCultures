@@ -64,6 +64,8 @@ namespace StrainCultures.Hediffs
 			// Plan for going inert
 			int inertInTicks = _strain.FallOffHours * Utilities.TimeMetrics.TICKS_PER_HOUR + _incubatingTicks;
 			Scheduling.EventScheduler.QueueEvent(inertInTicks, this, "Inert");
+
+			_strain.ApplyInfluences(pawn);
 		}
 
 		/// <summary>
@@ -119,6 +121,14 @@ namespace StrainCultures.Hediffs
 			base.ExposeData();
 
 			Scribe_Deep.Look(ref _strain, true, "strain");
+			Scribe_Values.Look(ref _state, "state");
+			Scribe_Values.Look(ref _incubatingTicks, "incubatingTicks");
+			Scribe_Values.Look<string>(ref _stateLabel, "stateLabel");
+
+			if (Scribe.mode == LoadSaveMode.PostLoadInit)
+			{
+				_infectionDef = (InfectionDef)def;
+			}
 		}
 
 		public void HandleEvent(string? signal)
