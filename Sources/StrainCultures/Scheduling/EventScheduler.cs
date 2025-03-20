@@ -12,15 +12,21 @@ namespace StrainCultures.Scheduling
 		private static EventScheduler? _instance;
 		private static TickManager? _tickManager;
 
-		public struct Event : IExposable
+		public class Event : IExposable
 		{
-			public Event(IEventHandler handler, string? signal)
+			public void Assign(IEventHandler handler, string? signal)
 			{
 				Handler = handler;
 				Signal = signal;
 			}
 
-			public IEventHandler Handler;
+			public void Clear()
+			{
+				Handler = null!;
+				Signal = null;
+			}
+
+			public IEventHandler? Handler;
 			public string? Signal;
 
 			public void ExposeData()
@@ -30,6 +36,7 @@ namespace StrainCultures.Scheduling
 			}
 		}
 
+		private Stack<Event> _recycleEvents = new Stack<Event>(100);
 		private Stack<Stack<Event>> _recycleBin = new Stack<Stack<Event>>(100);
 		private Dictionary<int, Stack<Event>> _scheduledEvents = new Dictionary<int, Stack<Event>>();
 		private int _ticksToNextEvent = -1;
@@ -70,26 +77,38 @@ namespace StrainCultures.Scheduling
 
 			if (_ticksToNextEvent == 0)
 			{
+				Mod.Logging.Message($"[{currentTick}] Raising events!");
 				if (_scheduledEvents.TryGetValue(currentTick, out Stack<Event> events))
 				{
 					while (events.TryPop(out Event currentEvent))
-						currentEvent.Handler.HandleEvent(currentEvent.Signal);
+					{
+						currentEvent.Handler?.HandleEvent(currentEvent.Signal);
+						currentEvent.Clear();
+						_recycleEvents.Push(currentEvent);
+					}
 
 					_scheduledEvents.Remove(currentTick);
 					_recycleBin.Push(events);
 				}
 
-				// Set ticks to event to the number of ticks from now to the next event.
+				ScheduleNextEvent(currentTick);
+			}
+		}
 
-				if (_scheduledEvents.Count > 0)
-				{
-					int nextEventTick = _scheduledEvents.Keys.Min();
-					int ticksToEvent = nextEventTick - currentTick;
-					if (ticksToEvent > 0)
-						_ticksToNextEvent = ticksToEvent;
-				}
-				else
-					_ticksToNextEvent = -1; // No future events scheduled.
+		/// <summary>
+		/// Set ticks to event to the number of ticks from now to the next event.
+		/// </summary>
+		/// <param name="currentTick"></param>
+		private void ScheduleNextEvent(int currentTick)
+		{
+			if (_scheduledEvents.Count == 0)
+				_ticksToNextEvent = -1; // No future events scheduled.
+			else
+			{
+				int nextEventTick = _scheduledEvents.Keys.Min();
+				int ticksToEvent = nextEventTick - currentTick;
+				if (ticksToEvent > 0)
+					_ticksToNextEvent = ticksToEvent;
 			}
 		}
 
@@ -97,9 +116,15 @@ namespace StrainCultures.Scheduling
 		{
 			base.ExposeData();
 
-			List<KeyValuePair<int, Event[]>> keyValuePairs = _scheduledEvents.Select(x => new KeyValuePair<int, Event[]>(x.Key, x.Value.ToArray())).ToList();
+			Dictionary<int, List<Event>> keyValuePairs = _scheduledEvents.ToDictionary(x => x.Key, x => x.Value.ToList());
 			Scribe_Collections.Look(ref keyValuePairs, "scheduledEvents", LookMode.Value, LookMode.Deep);
-			_scheduledEvents = keyValuePairs.ToDictionary(x => x.Key, x => new Stack<Event>(x.Value));
+			if (Scribe.mode == LoadSaveMode.LoadingVars)
+			{
+				_scheduledEvents = keyValuePairs.ToDictionary(x => x.Key, x => new Stack<Event>(x.Value));
+				ScheduleNextEvent(Find.TickManager!.TicksGame + 1);
+				Mod.Logging.Message($"[{Find.TickManager!.TicksGame}]: Scheduler loaded events for ticks: {String.Join(",", _scheduledEvents.Keys)}. Time until next event: {_ticksToNextEvent}");
+			}
+
 		}
 
 		public static void QueueEvent(int ticksFromNow, IEventHandler handler, string? signal = null)
@@ -110,10 +135,14 @@ namespace StrainCultures.Scheduling
 				return;
 			}
 
-			_instance.QueueEvent(ticksFromNow, new Event(handler, signal));
+			if (_instance._recycleEvents.TryPop(out Event newEvent) == false)
+				newEvent = new Event();
+
+			newEvent.Assign(handler, signal);
+			_instance.QueueEvent(ticksFromNow, newEvent);
 		}
 
-		public void QueueEvent(int ticksFromNow, Event eventEntry)
+		private void QueueEvent(int ticksFromNow, Event eventEntry)
 		{
 			int currentTick = _tickManager!.TicksGame;
 			int targetTick = currentTick + ticksFromNow;

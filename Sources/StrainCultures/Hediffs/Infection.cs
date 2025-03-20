@@ -121,6 +121,14 @@ namespace StrainCultures.Hediffs
 			base.ExposeData();
 
 			Scribe_Deep.Look(ref _strain, true, "strain");
+			Scribe_Values.Look(ref _state, "state");
+			Scribe_Values.Look(ref _incubatingTicks, "incubatingTicks");
+			Scribe_Values.Look<string>(ref _stateLabel, "stateLabel");
+
+			if (Scribe.mode == LoadSaveMode.PostLoadInit)
+			{
+				_infectionDef = (InfectionDef)def;
+			}
 		}
 
 		public void HandleEvent(string? signal)
