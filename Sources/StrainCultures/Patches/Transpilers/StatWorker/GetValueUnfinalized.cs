@@ -32,8 +32,7 @@ namespace StrainCultures.Patches.Transpilers.StatWorker
 			instruction.Enqueue(new(OpCodes.Mul));
 
 			var codes = new List<CodeInstruction>(instructions);
-			int count = codes.Count;
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < codes.Count; i++)
 			{
 				CodeInstruction current = codes[i];
 
@@ -41,7 +40,7 @@ namespace StrainCultures.Patches.Transpilers.StatWorker
 				{
 					// Sanity checks:
 					// Not end of code
-					if (i + 1 >= count)
+					if (i + 1 >= codes.Count)
 						continue;
 
 					// Next instruction is is a store. (Should be skipped.
@@ -70,7 +69,7 @@ namespace StrainCultures.Patches.Transpilers.StatWorker
 						CodeInstruction.StoreLocal(0)
 					};
 					codes.InsertRange(i-1, newInstructions);
-					break;
+					i += newInstructions.Count;
 				}
 			}
 			return codes.AsEnumerable();
@@ -91,7 +90,7 @@ namespace StrainCultures.Patches.Transpilers.StatWorker
 			{
 				return mutatedHediff.GetStatFactor(stat);
 			}
-			return 0;
+			return 1;
 		}
 	}
 }

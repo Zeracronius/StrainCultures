@@ -32,12 +32,12 @@ namespace StrainCultures.Hediffs
 
 		internal float GetStatFactor(StatDef stat)
 		{
-			throw new NotImplementedException();
+			return 1;
 		}
 
 		internal float GetStatOffset(StatDef stat)
 		{
-			throw new NotImplementedException();
+			return 0;
 		}
 	}
 }
