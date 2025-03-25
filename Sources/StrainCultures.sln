@@ -1,18 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrainCultures", "StrainCultures\StrainCultures.csproj", "{90372191-A13C-4C66-8A9E-2C146D29BD21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Hotswap|Any CPU = Hotswap|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{90372191-A13C-4C66-8A9E-2C146D29BD21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90372191-A13C-4C66-8A9E-2C146D29BD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90372191-A13C-4C66-8A9E-2C146D29BD21}.Hotswap|Any CPU.ActiveCfg = Hotswap|Any CPU
+		{90372191-A13C-4C66-8A9E-2C146D29BD21}.Hotswap|Any CPU.Build.0 = Hotswap|Any CPU
 		{90372191-A13C-4C66-8A9E-2C146D29BD21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90372191-A13C-4C66-8A9E-2C146D29BD21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

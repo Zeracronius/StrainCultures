@@ -1,4 +1,5 @@
-﻿using StrainCultures.Mutations;
+﻿using RimWorld;
+using StrainCultures.Mutations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,16 @@ namespace StrainCultures.Hediffs
 			base.ExposeData();
 
 			Scribe_Collections.Look(ref _mutations, "mutations", LookMode.Deep);
+		}
+
+		internal float GetStatFactor(StatDef stat)
+		{
+			throw new NotImplementedException();
+		}
+
+		internal float GetStatOffset(StatDef stat)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
