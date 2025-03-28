@@ -1,0 +1,60 @@
+<Defs>
+
+  <StrainCultures.MutationDef>
+    <defName>SC_StubbyHorns</defName>
+    <label>default horns</label>
+    <conflictingMutations><li>Horns</li></conflictingMutations>
+
+    <strainTags>
+      <BasicHorns>1</BasicHorns>
+    </strainTags>
+    <variants>
+      <li>
+        <label>stubby horns</label>
+      </li>
+      <li>
+        <label>horned lotus</label>
+        <condition>
+          <!--
+          Perhaps we want to track chimeric influence on a per-part level?
+          -->
+          <statDefRanges>
+            <SC_Corruption>0.8~999</SC_Corruption>
+          </statDefRanges>
+          <pawnType>Humanlike</pawnType>
+        </condition>
+      </li>
+    </variants>
+  </StrainCultures.MutationDef>
+
+  <StrainCultures.MutationDef>
+    <defName>SC_Wings</defName>
+    <label>default wings</label>
+    
+    <conflictingMutations><li>Wings</li></conflictingMutations>
+    <strainTags>
+      <BasicWings>1</BasicWings>
+    </strainTags>
+    <variants>
+      <!-- Only humanlikes can have wings. -->
+      <li>
+        <label>feathered wings</label>
+        <description>{pawn_nameDef} has feathered wings</description>
+        <condition><pawnType>Humanlike</pawnType></condition>
+      </li>
+      <li>
+        <label>jellyfish wings</label>
+        <description>{pawn_nameDef} has wings with appearance like a strange slimy jellyfish flower</description>
+        <condition>
+          <value>100</value>
+          <pawnType>Humanlike</pawnType>
+          <statDefRanges>
+            <SC_Corruption>1~999</SC_Corruption>
+          </statDefRanges>
+        </condition>
+      </li>
+    </variants>
+  </StrainCultures.MutationDef>
+
+
+</Defs>

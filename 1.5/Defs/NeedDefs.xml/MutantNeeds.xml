@@ -1,0 +1,12 @@
+<Defs>
+  <NeedDef>
+    <defName>SC_CorruptionNeed</defName>
+    <needClass>StrainCultures.Need_Corruption</needClass>
+    <label>individuality</label>
+    <description>How well the character is currently resisting the mental and physical effects of chimeric influence.</description>
+    <minIntelligence>Humanlike</minIntelligence>
+    <listPriority>51</listPriority>
+    <showForCaravanMembers>true</showForCaravanMembers>
+    <onlyIfCausedByHediff>true</onlyIfCausedByHediff>
+  </NeedDef>
+</Defs>

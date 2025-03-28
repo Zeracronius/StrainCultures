@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>NET48</TargetFramework>
-    <langVersion>10.0</langVersion>
+    <langVersion>Latest</langVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -33,6 +33,12 @@
   
   <ItemGroup>
     <Folder Include="Jobs\EmptyCulture\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="BetterPrerequisites">
+      <HintPath>..\..\..\Better Prerequisites\1.5\Main\Assemblies\BetterPrerequisites.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

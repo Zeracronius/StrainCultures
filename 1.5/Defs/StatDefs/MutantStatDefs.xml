@@ -1,0 +1,49 @@
+<Defs>
+  <StatDef>
+    <defName>SC_MorphResistance</defName>
+    <label>morph resistance</label>
+    <description>Affects the character's ability to retain their current form. Low values will make it easier to change into other forms.</description>
+    <category>BasicsPawn</category>
+    <minValue>0</minValue>
+    <showOnMechanoids>false</showOnMechanoids>
+    <toStringStyle>FloatTwo</toStringStyle>
+    <defaultBaseValue>1</defaultBaseValue>
+    <hideAtValue>1</hideAtValue>
+  </StatDef>
+
+  <StatDef>
+    <defName>SC_MorphStress</defName>
+    <label>morph stress</label>
+    <description>The more morph stress a character's accumulates the more likely is is that they will morph away from their current form.</description>
+    <category>BasicsPawn</category>
+    <minValue>0</minValue>
+    <showOnMechanoids>false</showOnMechanoids>
+    <toStringStyle>FloatTwo</toStringStyle>
+    <defaultBaseValue>0</defaultBaseValue>
+    <hideAtValue>0</hideAtValue>
+  </StatDef>
+
+  <StatDef>
+    <defName>SC_Defiance</defName>
+    <label>defiance</label>
+    <description>How well the character is resisting the mental and physical effects of chimeric influence.</description>
+    <category>BasicsPawn</category>
+    <minValue>0</minValue>
+    <showOnMechanoids>false</showOnMechanoids>
+    <toStringStyle>FloatTwo</toStringStyle>
+    <defaultBaseValue>1</defaultBaseValue>
+    <hideAtValue>1</hideAtValue>
+  </StatDef>
+
+  <StatDef>
+    <defName>SC_Corruption</defName>
+    <label>chimeric distortion</label>
+    <description>The more chimeric distortion a character has the harder it will be for them to resist chimeric influence.</description>
+    <category>BasicsPawn</category>
+    <minValue>0</minValue>
+    <showOnMechanoids>false</showOnMechanoids>
+    <toStringStyle>FloatTwo</toStringStyle>
+    <defaultBaseValue>0</defaultBaseValue>
+    <hideAtValue>0</hideAtValue>
+  </StatDef>
+</Defs>

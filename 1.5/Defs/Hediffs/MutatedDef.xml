@@ -2,6 +2,7 @@
 	<HediffDef>
 		<defName>SC_Mutated</defName>
 		<hediffClass>StrainCultures.Hediffs.Mutated</hediffClass>
+		<causesNeed>SC_CorruptionNeed</causesNeed>
 		<label>Mutated</label>
 		<description>This person has been mutated.</description>
 		<isBad>false</isBad>

@@ -15,11 +15,13 @@ namespace StrainCultures.Defs
 		{
 			DefOfHelper.EnsureInitializedInCtor(typeof(DefOfStrains));
 		}
+        public static StatDef? SC_Defiance;
+        public static StatDef? SC_Corruption;
 
-		public static HediffDef? SC_Infection;
+        public static HediffDef? SC_Infection;
 		public static HediffDef? SC_Mutated;
 
 		public static JobDef? SC_ExtractCultureJob;
 		public static JobDef? SC_InsertCultureJob;
-	}
+    }
 }
